@@ -1,0 +1,96 @@
+{% extends "store/base.html" %}
+{% block title %}Giỏ hàng — Nhà sách Sông Hương{% endblock %}
+
+{% block content %}
+{% if items %}
+<h2 class="h4 mb-3">Giỏ hàng ({{ items|length }} đầu sách)</h2>
+
+<div class="table-responsive bg-white border rounded">
+  <table class="table align-middle mb-0">
+    <thead class="table-light">
+      <tr>
+        <th>Sách</th>
+        <th class="text-end">Đơn giá</th>
+        <th class="text-center">Số lượng</th>
+        <th class="text-end">Thành tiền</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      {% set book = item.book %}
+      <tr>
+        <td>
+          <div class="d-flex align-items-center gap-2">
+            {% if book.cover_image %}
+              <img src="{{ url_for('static', filename='uploads/' + book.cover_image) }}" class="thumb-sm" alt="">
+            {% else %}
+              <div class="thumb-sm"></div>
+            {% endif %}
+            <a href="{{ url_for('store.book_detail', book_id=book.id) }}" class="text-decoration-none">
+              {{ book.title }}
+            </a>
+          </div>
+        </td>
+        <td class="text-end">{{ item.unit_price|vnd }}</td>
+        <td class="text-center">
+          <div class="qty-control justify-content-center">
+            <form method="post" class="d-inline">
+              {{ form.hidden_tag() }}
+              <input type="hidden" name="book_id" value="{{ book.id }}">
+              <input type="hidden" name="action" value="dec">
+              <button class="btn btn-outline-secondary btn-sm" type="submit">−</button>
+            </form>
+            <span class="mx-1">{{ item.quantity }}</span>
+            <form method="post" class="d-inline">
+              {{ form.hidden_tag() }}
+              <input type="hidden" name="book_id" value="{{ book.id }}">
+              <input type="hidden" name="action" value="inc">
+              <button class="btn btn-outline-secondary btn-sm" type="submit"
+                      {% if item.quantity >= book.stock %}disabled{% endif %}>+</button>
+            </form>
+          </div>
+        </td>
+        <td class="text-end fw-semibold">{{ item.subtotal|vnd }}</td>
+        <td class="text-end">
+          <form method="post" class="d-inline"
+                onsubmit="return confirm('Xoá sách này khỏi giỏ?');">
+            {{ form.hidden_tag() }}
+            <input type="hidden" name="book_id" value="{{ book.id }}">
+            <input type="hidden" name="action" value="remove">
+            <button class="btn btn-link text-danger btn-sm text-decoration-none" type="submit">Xoá</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" class="text-end fw-semibold">Tổng cộng</td>
+        <td class="text-end price fs-5">{{ subtotal|vnd }}</td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="d-flex flex-wrap gap-2 justify-content-between mt-3">
+  <a href="{{ url_for('store.books_list') }}" class="btn btn-outline-primary">← Tiếp tục mua sách</a>
+  <div class="d-flex gap-2">
+    <form method="post" onsubmit="return confirm('Xoá toàn bộ giỏ hàng?');">
+      {{ form.hidden_tag() }}
+      <input type="hidden" name="action" value="clear">
+      <button type="submit" class="btn btn-outline-danger">Xoá giỏ hàng</button>
+    </form>
+    <a href="{{ url_for('store.checkout') }}" class="btn btn-primary">Đặt hàng →</a>
+  </div>
+</div>
+
+{% else %}
+  <div class="text-center py-5 bg-white border rounded">
+    <h2 class="h4 mb-3">Giỏ hàng trống</h2>
+    <p class="text-muted">Hãy chọn sách để bắt đầu mua sắm.</p>
+    <a href="{{ url_for('store.books_list') }}" class="btn btn-primary">← Tiếp tục mua sách</a>
+  </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "store/base.html" %}
+{% block title %}Thông tin khách hàng — Nhà sách Sông Hương{% endblock %}
+
+{% block content %}
+<h2 class="h4 mb-4">Thông tin khách hàng</h2>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <form method="post" class="bg-white border rounded p-4" novalidate>
+      {{ form.hidden_tag() }}
+
+      <div class="mb-3">
+        <label class="form-label">{{ form.customer_name.label.text }} <span class="text-danger">*</span></label>
+        {{ form.customer_name(class="form-control" + (" is-invalid" if form.customer_name.errors else "")) }}
+        {% for e in form.customer_name.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">{{ form.phone.label.text }} <span class="text-danger">*</span></label>
+        {{ form.phone(class="form-control" + (" is-invalid" if form.phone.errors else ""), placeholder="0xxxxxxxxx") }}
+        {% for e in form.phone.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">{{ form.email.label.text }}</label>
+        {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+        {% for e in form.email.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">{{ form.address.label.text }} <span class="text-danger">*</span></label>
+        {{ form.address(class="form-control" + (" is-invalid" if form.address.errors else ""), rows=3) }}
+        {% for e in form.address.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">{{ form.note.label.text }}</label>
+        {{ form.note(class="form-control", rows=2) }}
+      </div>
+
+      <fieldset class="mb-4">
+        <legend class="form-label fs-6">{{ form.payment_method.label.text }}</legend>
+        {% for sub in form.payment_method %}
+          <div class="form-check">
+            {{ sub(class="form-check-input") }}
+            <label class="form-check-label" for="{{ sub.id }}">{{ sub.label.text }}</label>
+          </div>
+        {% endfor %}
+      </fieldset>
+
+      {{ form.submit(class="btn btn-primary") }}
+      <a href="{{ url_for('store.cart_view') }}" class="btn btn-link">Quay lại giỏ hàng</a>
+    </form>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="order-summary">
+      <h3 class="h6 mb-3">Đơn hàng</h3>
+      <ul class="list-unstyled mb-3">
+        {% for item in items %}
+          <li class="d-flex justify-content-between mb-2">
+            <span>{{ item.book.title }} × {{ item.quantity }}</span>
+            <span>{{ item.subtotal|vnd }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+      <hr>
+      <div class="d-flex justify-content-between mb-2">
+        <span>Tạm tính</span>
+        <span>{{ subtotal|vnd }}</span>
+      </div>
+      <div class="d-flex justify-content-between mb-2">
+        <span>Phí giao hàng</span>
+        <span>
+          {% if shipping_fee == 0 %}
+            <span class="text-success">Miễn phí</span>
+          {% else %}
+            {{ shipping_fee|vnd }}
+          {% endif %}
+        </span>
+      </div>
+      <small class="text-muted d-block mb-3">Miễn phí khi tạm tính từ 200.000 đ</small>
+      <div class="d-flex justify-content-between">
+        <strong>Tổng thanh toán</strong>
+        <strong class="price">{{ total|vnd }}</strong>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

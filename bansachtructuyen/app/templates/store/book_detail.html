@@ -1,0 +1,76 @@
+{% extends "store/base.html" %}
+{% block title %}{{ book.title }} — Nhà sách Sông Hương{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb-store mb-3" aria-label="breadcrumb">
+  <ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item"><a href="{{ url_for('store.books_list') }}">Sách</a></li>
+    <li class="breadcrumb-item"><a href="{{ url_for('store.books_list', category_id=book.category_id) }}">{{ book.category.name }}</a></li>
+    <li class="breadcrumb-item active">{{ book.title }}</li>
+  </ol>
+</nav>
+
+<div class="row g-4">
+  <div class="col-md-4">
+    {% if book.cover_image %}
+      <img src="{{ url_for('static', filename='uploads/' + book.cover_image) }}"
+           alt="{{ book.title }}" class="book-cover">
+    {% else %}
+      <div class="book-cover-placeholder">Ảnh bìa</div>
+    {% endif %}
+  </div>
+  <div class="col-md-8">
+    <h2 class="h3 mb-2">{{ book.title }}</h2>
+    <p class="mb-1 text-muted">
+      Tác giả: <strong>{{ book.author }}</strong>
+      {% if book.publisher %} · NXB {{ book.publisher }}{% endif %}
+      {% if book.year %}, {{ book.year }}{% endif %}
+    </p>
+    <p class="price fs-4 mb-2">{{ book.price|vnd }}</p>
+    <p class="mb-1">Danh mục: <span class="badge text-bg-light border">{{ book.category.name }}</span></p>
+    <p class="mb-3">
+      {% if book.stock > 0 %}
+        <span class="text-success">● Còn {{ book.stock }} cuốn</span>
+      {% else %}
+        <span class="text-danger">● Hết hàng</span>
+      {% endif %}
+    </p>
+    {% if book.description %}
+      <p class="mb-4">{{ book.description }}</p>
+    {% endif %}
+
+    {% if max_add > 0 %}
+    <form method="post" class="d-flex flex-wrap align-items-center gap-3">
+      {{ form.hidden_tag() }}
+      <div class="qty-control">
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="qtyMinus">−</button>
+        <input type="number" name="quantity" id="qtyInput" class="form-control form-control-sm"
+               value="1" min="1" max="{{ max_add }}">
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="qtyPlus">+</button>
+      </div>
+      <small class="text-muted">tối đa {{ max_add }}{% if in_cart %} (đã có {{ in_cart }} trong giỏ){% endif %}</small>
+      <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
+    </form>
+    {% else %}
+      <button type="button" class="btn btn-secondary" disabled>
+        {% if book.stock <= 0 %}Hết hàng{% else %}Đã đạt giới hạn tồn kho trong giỏ{% endif %}
+      </button>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const input = document.getElementById('qtyInput');
+  const max = {{ max_add }};
+  if (input) {
+    document.getElementById('qtyMinus').addEventListener('click', () => {
+      input.value = Math.max(1, parseInt(input.value || 1) - 1);
+    });
+    document.getElementById('qtyPlus').addEventListener('click', () => {
+      input.value = Math.min(max, parseInt(input.value || 1) + 1);
+    });
+  }
+</script>
+{% endblock %}

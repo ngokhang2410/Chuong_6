@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thử truy vấn dữ liệu</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f6f8; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h1 { color: #1f7a5c; margin-top: 0; }
+        .query-item { background: #f8f9fa; border-left: 4px solid #1f7a5c; padding: 12px 15px; margin-bottom: 12px; border-radius: 0 6px 6px 0; }
+        .query-title { font-weight: bold; color: #333; margin-bottom: 5px; }
+        .query-result { color: #555; }
+        .badge { background: #e8f2ec; color: #1f7a5c; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+        a { display: inline-block; margin-top: 15px; color: #1f7a5c; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kết quả thử truy vấn CSDL</h1>
+
+        <div class="query-item">
+            <div class="query-title">1. get(3) - Tìm theo ID = 3:</div>
+            <div class="query-result">{{ get_3 if get_3 else 'Không tìm thấy' }}</div>
+        </div>
+
+        <div class="query-item">
+            <div class="query-title">2. get(99) - Tìm theo ID = 99:</div>
+            <div class="query-result">{{ get_99 if get_99 else 'None (Không có dữ liệu)' }}</div>
+        </div>
+
+        <div class="query-item">
+            <div class="query-title">3. Tất cả sinh viên:</div>
+            <div class="query-result">Tổng số: <span class="badge">{{ everyone|length }} sinh viên</span></div>
+        </div>
+
+        <div class="query-item">
+            <div class="query-title">4. Lọc sinh viên có Điểm GPA >= 8 (Sắp xếp giảm dần):</div>
+            <div class="query-result">
+                {% if good %}
+                    <ul>
+                        {% for sv in good %}
+                            <li>{{ sv.name }} (MSSV: {{ sv.mssv }}) - GPA: <strong>{{ "%.2f"|format(sv.gpa) }}</strong></li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    Không có sinh viên nào đạt điểm >= 8.
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="query-item">
+            <div class="query-title">5. Lọc theo MSSV (23T1020007):</div>
+            <div class="query-result">{{ binh if binh else 'Không tìm thấy' }}</div>
+        </div>
+
+        <div class="query-item">
+            <div class="query-title">6. Thống kê chung:</div>
+            <div class="query-result">
+                Số sinh viên: <span class="badge">{{ count }}</span> | 
+                Điểm trung bình toàn khóa: <span class="badge">{{ "%.2f"|format(avg) if avg else 0 }}</span>
+            </div>
+        </div>
+
+        <a href="/">← Quay lại Trang chủ</a>
+    </div>
+</body>
+</html>

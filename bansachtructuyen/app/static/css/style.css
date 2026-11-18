@@ -1,0 +1,264 @@
+:root {
+  --brand: #1a365d;
+  --brand-dark: #0f2744;
+  --accent: #e67e22;
+  --accent-soft: #fff4e8;
+  --muted: #6c757d;
+  --surface: #f5f7fb;
+}
+
+body {
+  background: var(--surface);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== Storefront ===== */
+.store-navbar {
+  background: var(--brand) !important;
+}
+
+.store-navbar .navbar-brand,
+.store-navbar .nav-link {
+  color: #fff !important;
+}
+
+.store-navbar .nav-link:hover {
+  opacity: 0.9;
+}
+
+.cart-badge {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.45rem;
+  margin-left: 0.25rem;
+  vertical-align: top;
+}
+
+.price {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.book-cover,
+.book-cover-placeholder {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: #d9dee7;
+  border-radius: 0.35rem;
+}
+
+.book-cover-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a93a3;
+  font-size: 0.85rem;
+}
+
+.book-card {
+  border: 1px solid #e5e9f0;
+  border-radius: 0.5rem;
+  background: #fff;
+  height: 100%;
+  transition: box-shadow 0.15s ease;
+}
+
+.book-card:hover {
+  box-shadow: 0 6px 18px rgba(26, 54, 93, 0.12);
+}
+
+.stock-zero {
+  color: #dc3545 !important;
+  font-weight: 600;
+}
+
+.qty-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.qty-control input[type="number"] {
+  width: 4rem;
+  text-align: center;
+}
+
+.breadcrumb-store {
+  font-size: 0.9rem;
+}
+
+.order-summary {
+  background: #fff;
+  border: 1px solid #e5e9f0;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+}
+
+/* ===== Admin ===== */
+.admin-layout {
+  min-height: 100vh;
+}
+
+.admin-sidebar {
+  background: var(--brand-dark);
+  color: #fff;
+  min-height: 100vh;
+  width: 260px;
+  flex-shrink: 0;
+}
+
+.admin-sidebar a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  display: block;
+  padding: 0.7rem 1.25rem;
+  border-left: 3px solid transparent;
+}
+
+.admin-sidebar a:hover,
+.admin-sidebar a.active {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-left-color: var(--accent);
+}
+
+.admin-sidebar .brand {
+  padding: 1.25rem;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-sidebar .footer-link {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto;
+}
+
+.admin-main {
+  flex: 1;
+  padding: 1.5rem;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1px solid #e5e9f0;
+  border-radius: 0.5rem;
+  padding: 1.1rem 1.25rem;
+}
+
+.stat-card .stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.stat-card .stat-label {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.pending-badge {
+  background: #dc3545;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.45rem;
+  margin-left: 0.35rem;
+}
+
+.status-tabs .nav-link {
+  color: var(--brand);
+}
+
+.status-tabs .nav-link.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.table-clickable tbody tr {
+  cursor: pointer;
+}
+
+.table-clickable tbody tr:hover {
+  background: var(--accent-soft);
+}
+
+.cover-preview {
+  width: 160px;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: #d9dee7;
+  border-radius: 0.35rem;
+}
+
+.chart-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  height: 140px;
+}
+
+.chart-bar .bar {
+  flex: 1;
+  background: #3b82f6;
+  border-radius: 0.25rem 0.25rem 0 0;
+  min-height: 4px;
+}
+
+.chart-labels {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.chart-labels span {
+  flex: 1;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.timeline {
+  list-style: none;
+  padding-left: 0;
+  border-left: 2px solid #dee2e6;
+  margin-left: 0.5rem;
+}
+
+.timeline li {
+  position: relative;
+  padding: 0 0 1rem 1rem;
+}
+
+.timeline li::before {
+  content: "";
+  position: absolute;
+  left: -0.4rem;
+  top: 0.3rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.thumb-sm {
+  width: 40px;
+  height: 52px;
+  object-fit: cover;
+  background: #d9dee7;
+  border-radius: 0.25rem;
+}
+
+@media (max-width: 991.98px) {
+  .admin-sidebar {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .admin-layout {
+    flex-direction: column;
+  }
+}

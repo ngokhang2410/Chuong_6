@@ -1,0 +1,82 @@
+{% extends "admin/base.html" %}
+{% block title %}{% if book %}Sửa sách{% else %}Thêm sách{% endif %} — Quản trị{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ url_for('admin.books_list') }}">Sách</a></li>
+    <li class="breadcrumb-item active">{% if book %}Sửa{% else %}Thêm{% endif %}</li>
+  </ol>
+</nav>
+
+<h1 class="h4 mb-3">
+  {% if book %}Sửa sách: {{ book.title }}{% else %}Thêm sách{% endif %}
+</h1>
+
+<form method="post" enctype="multipart/form-data" class="bg-white border rounded p-4" novalidate>
+  {{ form.hidden_tag() }}
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="mb-3">
+        <label class="form-label">{{ form.title.label.text }} <span class="text-danger">*</span></label>
+        {{ form.title(class="form-control" + (" is-invalid" if form.title.errors else "")) }}
+        {% for e in form.title.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ form.author.label.text }} <span class="text-danger">*</span></label>
+        {{ form.author(class="form-control" + (" is-invalid" if form.author.errors else "")) }}
+        {% for e in form.author.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ form.category_id.label.text }} <span class="text-danger">*</span></label>
+        {{ form.category_id(class="form-select" + (" is-invalid" if form.category_id.errors else "")) }}
+        {% for e in form.category_id.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label class="form-label">{{ form.publisher.label.text }}</label>
+          {{ form.publisher(class="form-control") }}
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">{{ form.year.label.text }}</label>
+          {{ form.year(class="form-control" + (" is-invalid" if form.year.errors else "")) }}
+          {% for e in form.year.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">{{ form.price.label.text }} <span class="text-danger">*</span></label>
+          {{ form.price(class="form-control" + (" is-invalid" if form.price.errors else "")) }}
+          {% for e in form.price.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ form.stock.label.text }} <span class="text-danger">*</span></label>
+        {{ form.stock(class="form-control" + (" is-invalid" if form.stock.errors else "")) }}
+        {% for e in form.stock.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ form.description.label.text }}</label>
+        {{ form.description(class="form-control", rows=4) }}
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <label class="form-label">Ảnh bìa</label>
+      {% if book and book.cover_image %}
+        <img src="{{ url_for('static', filename='uploads/' + book.cover_image) }}"
+             class="cover-preview d-block mb-2" alt="Ảnh hiện tại">
+        <small class="text-muted d-block mb-2">Ảnh hiện tại</small>
+      {% else %}
+        <div class="cover-preview d-flex align-items-center justify-content-center text-muted mb-2">Chưa có ảnh</div>
+      {% endif %}
+      {{ form.cover_image(class="form-control" + (" is-invalid" if form.cover_image.errors else "")) }}
+      {% for e in form.cover_image.errors %}<div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
+      <small class="text-muted">JPG, PNG, WEBP — tối đa 2 MB</small>
+    </div>
+  </div>
+
+  <div class="mt-3">
+    {{ form.submit(class="btn btn-primary") }}
+    <a href="{{ url_for('admin.books_list') }}" class="btn btn-outline-secondary">Huỷ</a>
+  </div>
+</form>
+{% endblock %}

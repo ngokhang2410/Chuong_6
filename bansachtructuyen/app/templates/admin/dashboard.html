@@ -1,0 +1,94 @@
+{% extends "admin/base.html" %}
+{% block title %}Tổng quan — Quản trị{% endblock %}
+
+{% block content %}
+<h1 class="h4 mb-4">Tổng quan</h1>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3 col-6">
+    <div class="stat-card">
+      <div class="stat-value">{{ total_books }}</div>
+      <div class="stat-label">Đầu sách</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="stat-card">
+      <div class="stat-value">{{ pending_orders }}</div>
+      <div class="stat-label">Đơn chờ xác nhận</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="stat-card">
+      <div class="stat-value">{{ month_revenue|vnd }}</div>
+      <div class="stat-label">Doanh thu tháng {{ month_label }}</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="stat-card">
+      <div class="stat-value">{{ low_stock_count }}</div>
+      <div class="stat-label">Sắp hết hàng</div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="bg-white border rounded p-3">
+      <h2 class="h6 mb-3">Đơn hàng mới nhất</h2>
+      <div class="table-responsive">
+        <table class="table table-sm align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Mã</th>
+              <th>Khách hàng</th>
+              <th class="text-end">Tổng tiền</th>
+              <th>Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for o in recent_orders %}
+            <tr>
+              <td><a href="{{ url_for('admin.order_detail', order_id=o.id) }}">#{{ o.id }}</a></td>
+              <td>{{ o.customer_name }}</td>
+              <td class="text-end">{{ o.total|vnd }}</td>
+              <td><span class="badge text-bg-{{ status_badge(o.status) }}">{{ o.status }}</span></td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" class="text-muted">Chưa có đơn hàng.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="bg-white border rounded p-3 mb-3">
+      <h2 class="h6 mb-3">Sắp hết hàng</h2>
+      <ul class="list-unstyled mb-2">
+        {% for b in low_stock_books %}
+          <li class="mb-1">
+            <a href="{{ url_for('admin.books_edit', book_id=b.id) }}">{{ b.title }}</a>
+            <span class="{% if b.stock == 0 %}stock-zero{% else %}text-muted{% endif %}">({{ b.stock }})</span>
+          </li>
+        {% else %}
+          <li class="text-muted">Không có sách sắp hết.</li>
+        {% endfor %}
+      </ul>
+      <a href="{{ url_for('admin.books_list', stock='low') }}">Nhập thêm sách →</a>
+    </div>
+
+    <div class="bg-white border rounded p-3">
+      <h2 class="h6 mb-3">Doanh thu 7 ngày</h2>
+      <div class="chart-bar">
+        {% for r in chart_revenues %}
+          <div class="bar" style="height: {{ (r / chart_max * 100)|round }}%;" title="{{ r|vnd }}"></div>
+        {% endfor %}
+      </div>
+      <div class="chart-labels">
+        {% for d in chart_days %}<span>{{ d }}</span>{% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
